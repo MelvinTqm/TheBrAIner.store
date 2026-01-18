@@ -7,6 +7,21 @@ interface HomeProps {
 }
 
 const Home: React.FC<HomeProps> = ({ onNavigate }) => {
+  // Helper to resolve asset paths for GitHub Pages
+  const getAssetPath = (path: string) => {
+    // Check if we are running on GitHub Pages (or just assume relative handling needs help)
+    const isGithub = window.location.hostname.includes('github.io');
+    const repoName = '/TheBrAIner.store';
+    
+    // Remove leading slash from path input to be clean
+    const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+    
+    if (isGithub) {
+      return `${repoName}/${cleanPath}`;
+    }
+    return `/${cleanPath}`;
+  };
+
   return (
     <div className="min-h-screen bg-cosmic-900 text-white font-sans relative overflow-hidden flex flex-col animate-fade-in">
       <StarBackground />
@@ -49,12 +64,8 @@ const Home: React.FC<HomeProps> = ({ onNavigate }) => {
          <div className="mb-12 relative group cursor-pointer" onClick={() => onNavigate('ebook')}>
             <div className="absolute inset-0 bg-blue-500/20 blur-3xl rounded-full opacity-20 group-hover:opacity-40 transition-opacity duration-700"></div>
             
-            {/* 
-               IMPORTANT: Ensure 'logo.png' exists in your project's public folder. 
-               The image is styled to match the dark theme and float slightly.
-            */}
             <img 
-                src="./logo.png"
+                src={getAssetPath('logo.png')}
                 alt="The BrAIner Logo"
                 className="relative w-64 md:w-96 h-auto mx-auto object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.1)] transition-transform duration-700 group-hover:scale-105"
                 onError={(e) => {
